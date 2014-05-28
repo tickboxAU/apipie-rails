@@ -131,7 +131,7 @@ module Apipie
                    nil
                  end
 
-          if route[:verb].present?
+          if route[:verb].present? && !path.nil?
             @apis_from_routes[[controller, action]] << {:method => route[:verb], :path => path}
           end
         end
