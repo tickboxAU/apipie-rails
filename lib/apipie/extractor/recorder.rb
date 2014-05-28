@@ -30,7 +30,7 @@ module Apipie
       end
 
       def analyze_functional_test(test_context)
-        request, response = test_context.request, test_context.response
+        request, response = test_context.instance_variable_get(:@request), test_context.instance_variable_get(:@response)
         @verb = request.request_method.to_sym
         @path = request.path
         @params = request.request_parameters
