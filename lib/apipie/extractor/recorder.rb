@@ -22,15 +22,15 @@ module Apipie
         @action = controller.params[:action]
       end
 
-      def analyse_response(response)
-        if response.last.respond_to?(:body) && data = parse_data(response.last.body)
+      def analyse_response(apipie_response)
+        if apipie_response.last.respond_to?(:body) && data = parse_data(apipie_response.last.body)
           @response_data = data
         end
-        @code = response.first
+        @code = apipie_response.first
       end
 
       def analyze_functional_test(test_context)
-        request, response = test_context.request, test_context.response
+        request, apipie_response = test_context.request, test_context.response
         @verb = request.request_method.to_sym
         @path = request.path
         @params = request.request_parameters
@@ -39,8 +39,8 @@ module Apipie
         else
           @query = request.query_string
         end
-        @response_data = parse_data(response.body)
-        @code = response.code
+        @response_data = parse_data(apipie_response.body)
+        @code = apipie_response.code
       end
 
       def parse_data(data)
@@ -100,10 +100,10 @@ module Apipie
 
         def analyze(env, &block)
           Apipie::Extractor.call_recorder.analyse_env(env)
-          response = block.call
-          Apipie::Extractor.call_recorder.analyse_response(response)
+          apipie_response = block.call
+          Apipie::Extractor.call_recorder.analyse_response(apipie_response)
           Apipie::Extractor.call_finished
-          response
+          apipie_response
         ensure
           Apipie::Extractor.clean_call_recorder
         end
